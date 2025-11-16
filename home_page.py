@@ -23,13 +23,13 @@ st.write("Choose a plot from the pages on the left.")
 
 
 
-st.page_link("pages/Scatter_and_line.py", label="Scatter and Line plot")
-st.page_link("pages/bar_plot.py", label="Bar")
-st.page_link("pages/histogram_plot.py", label="Histogram")
-st.page_link("pages/polar_plot.py", label="Polar plot")
-st.page_link("pages/_3D-plot.py", label=" 3D function plot")
-st.page_link("pages/_2D-plot.py", label="2D function plot")
-st.page_link("pages/Pie-chart.py", label="Pie-Chart")
+st.page_link("Pages/Scatter_and_line.py", label="Scatter and Line plot")
+st.page_link("Pages/bar_plot.py", label="Bar")
+st.page_link("Pages/histogram_plot.py", label="Histogram")
+st.page_link("Pages/polar_plot.py", label="Polar plot")
+st.page_link("Pages/_3D-plot.py", label=" 3D function plot")
+st.page_link("Pages/_2D-plot.py", label="2D function plot")
+st.page_link("Pages/Pie-chart.py", label="Pie-Chart")
 
 with st.expander("▼ Click to view user manual"):
     st.title("1) Input rules")
