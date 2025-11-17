@@ -277,9 +277,9 @@ elif chose_upload=="Excel Spreadsheet":
            
             C_minus_cut = st.slider(
             "C-",
-            min_value=float(min_val),
+            min_value=float(NC_cut+1),
             max_value=float(max_val),
-            value=float(avg - arr_down[1]-1),   
+            value=float(NC_cut+1),   
             step=1.0
             )
             C_cut = st.slider(
@@ -336,7 +336,7 @@ elif chose_upload=="Excel Spreadsheet":
                     B_minus_count+=1
                 elif num>C_count:
                     C_count+=1
-                elif num>C_minus_count:
+                elif num>C_minus_cut:
                     C_minus_count+=1
                 else:
                     NC_count+=1
@@ -680,7 +680,7 @@ elif chose_upload=="CSV file":
             "C-",
             min_value=float(NC_cut+1),
             max_value=float(max_val),
-            value=float(avg - arr_down[1]-1),   
+            value=float(NC_cut+1),   
             step=1.0
             )
             C_cut = st.slider(
@@ -737,7 +737,7 @@ elif chose_upload=="CSV file":
                     B_minus_count+=1
                 elif num>C_count:
                     C_count+=1
-                elif num>C_minus_count:
+                elif num>C_minus_cut:
                     C_minus_count+=1
                 else:
                     NC_count+=1
