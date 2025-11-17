@@ -265,11 +265,18 @@ elif chose_upload=="Excel Spreadsheet":
 
             arr_down=[bound_down_1,bound_down_2]
             arr_down=sorted(arr_down)
+            A_cut = avg + arr_up[2]
+            A_minus_cut= avg + arr_up[1]
+            B_cut= avg + arr_up[0]
+            B_minus_cut= avg                
+            C_cut= avg - arr_down[0]
+            C_minus_cut= avg - arr_down[1]
+            NC_cut= 0.0
 
             NC_cut=st.slider(
             "NC",
             min_value=0.0,
-            max_value=float(max_val),
+            max_value=float(C_minus_cut),
             value=0.0,
             step=1.0
             )
@@ -279,14 +286,14 @@ elif chose_upload=="Excel Spreadsheet":
             "C-",
             min_value=float(NC_cut+1),
             max_value=float(max_val),
-            value=float(NC_cut+1),   
+            value=float(C_minus_cut),   
             step=1.0
             )
             C_cut = st.slider(
             "C",
             min_value=float(C_minus_cut+1),
             max_value=float(max_val),
-            value=float(avg - arr_down[0]-1),   
+            value=float(C_cut),   
             step=1.0
             )
             B_minus_cut = st.slider(
@@ -300,21 +307,21 @@ elif chose_upload=="Excel Spreadsheet":
             "B",
             min_value=float(B_minus_cut+1),
             max_value=float(max_val),
-            value=float(avg + arr_up[0]-1),   
+            value=float(B_cut),   
             step=1.0
             )
             A_minus_cut = st.slider(
             "A-",
             min_value=float(B_cut+1),
             max_value=float(max_val),
-            value=float(avg + arr_up[1]-1),   
+            value=float(A_minus_cut),   
             step=1.0
             )
             A_cut = st.slider(
             "A",
             min_value=float(A_minus_cut+1),
             max_value=float(max_val),
-            value=float(avg + arr_up[2]-1),   
+            value=float(A_cut),   
             step=1.0
             )
             A_count=0
@@ -665,6 +672,14 @@ elif chose_upload=="CSV file":
             arr_down=[bound_down_1,bound_down_2]
             arr_down=sorted(arr_down)
 
+            A_cut = avg + arr_up[2]
+            A_minus_cut= avg + arr_up[1]
+            B_cut= avg + arr_up[0]
+            B_minus_cut= avg                
+            C_cut= avg - arr_down[0]
+            C_minus_cut= avg - arr_down[1]
+            NC_cut= 0.0
+
             
 
             NC_cut=st.slider(
@@ -680,14 +695,14 @@ elif chose_upload=="CSV file":
             "C-",
             min_value=float(NC_cut+1),
             max_value=float(max_val),
-            value=float(NC_cut+1),   
+            value=float(C_minus_cut),   
             step=1.0
             )
             C_cut = st.slider(
             "C",
             min_value=float(C_minus_cut+1),
             max_value=float(max_val),
-            value=float(avg - arr_down[0]-1),   
+            value=float(C_cut),   
             step=1.0
             )
             B_minus_cut = st.slider(
@@ -701,21 +716,21 @@ elif chose_upload=="CSV file":
             "B",
             min_value=float(B_minus_cut+1),
             max_value=float(max_val),
-            value=float(avg + arr_up[0]-1),   
+            value=float(B_cut),   
             step=1.0
             )
             A_minus_cut = st.slider(
             "A-",
             min_value=float(B_cut+1),
             max_value=float(max_val),
-            value=float(avg + arr_up[1]-1),   
+            value=float(A_minus_cut),   
             step=1.0
             )
             A_cut = st.slider(
             "A",
             min_value=float(A_minus_cut+1),
             max_value=float(max_val),
-            value=float(avg + arr_up[2]-1),   
+            value=float(A_cut),   
             step=1.0
             )
             A_count=0
