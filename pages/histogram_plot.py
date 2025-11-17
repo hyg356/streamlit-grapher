@@ -334,9 +334,9 @@ elif chose_upload=="Excel Spreadsheet":
                     B_count+=1
                 elif num>B_minus_cut:
                     B_minus_count+=1
-                elif num>C_count:
+                elif num>C_cut:
                     C_count+=1
-                elif num>C_minus_count:
+                elif num>C_minus_cut:
                     C_minus_count+=1
                 else:
                     NC_count+=1
@@ -735,9 +735,9 @@ elif chose_upload=="CSV file":
                     B_count+=1
                 elif num>B_minus_cut:
                     B_minus_count+=1
-                elif num>C_count:
+                elif num>C_cut:
                     C_count+=1
-                elif num>C_minus_count:
+                elif num>C_minus_cut:
                     C_minus_count+=1
                 else:
                     NC_count+=1
