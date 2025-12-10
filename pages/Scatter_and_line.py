@@ -60,7 +60,7 @@ if inp_type == "Manual":
     if is_best_fit == "Yes":
         fit_type = st.radio(
             "Choose among the following types of fit:", 
-            ["Smart fit(AI)", "Linear fit"]
+            ["Smart fit", "Linear fit"]
         )
 
         # linear fit
@@ -82,7 +82,7 @@ if inp_type == "Manual":
             st.pyplot(plt)
 
         # smart fit
-        elif fit_type == "Smart fit(AI)":
+        elif fit_type == "Smart fit":
 
             domain_start = st.number_input("Enter lower bound of the domain: ")
             domain_end = st.number_input("Enter upper bound of the domain: ")
