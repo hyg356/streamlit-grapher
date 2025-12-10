@@ -223,7 +223,8 @@ elif chose_upload == "CSV file":
             bins = np.linspace(0, max_val + 1.0, int(num_bins))   # note +1.0 (not 1e-6)
             plt.hist(df[marks], bins=bins, edgecolor='black')
             plt.xlim(0, max_val + 1.0)
-            plt.xticks(range(0, int(max_val)+3, 3), fontsize=12)
+            plt.xticks(range(0, int(max_val)+1, 10), fontsize=12)
+
 
     
 
