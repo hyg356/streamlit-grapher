@@ -2,6 +2,18 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 import matplotlib.pyplot as plt
+def get_tail_area(height, width):
+   
+    
+    if width <= 0 or height <= 0:
+        return 0.0
+    
+    # Heuristic: Decay constant 'k' set so it drops to 5% (e^-3) at the boundary
+    k = 50000 / width 
+    
+    # Area = (h / k) * (1 - e^(-k * width))
+    area = (height / k) * (1 - np.exp(-k * width))
+    return area
 
 st.title("Histogram Graph Plotter")
 
@@ -96,10 +108,22 @@ elif chose_upload == "CSV file":
         Y_val.append(0)
 
         area_arr = []
+        #first curve
 
-        base = X_val[1] - X_val[0]
-        h1 = Y_val[1]
-        area_arr.append(0.5 * base * h1)
+        
+        min_target = 1  # "One above the minimum value (0)"
+            
+            # The first real data point is at index 1 (index 0 was dummy -1)
+        first_mark_val = X_val[1]
+        first_mark_count = Y_val[1]
+            
+            # Width of the tail = distance from first mark to min_target
+        left_width = first_mark_val - min_target
+            
+        area_1 = get_tail_area(height=first_mark_count, width=left_width)
+        area_arr.append(area_1)
+
+        #--------------------------------------
 
         for j in range(1, len(X_val) - 1):
             x1 = X_val[j]
@@ -114,18 +138,30 @@ elif chose_upload == "CSV file":
                 rect = min(y1, y2) * base
                 tri = 0.5 * base * abs(y2 - y1)
                 area_arr.append(rect + tri)
+        #last curve
 
-        base = X_val[-1] - X_val[-2]
-        height = Y_val[-2]
-        area_arr.append(0.5 * base * height)
+        last_mark_val = X_val[-2]
+        last_mark_count = Y_val[-2]
+            
+            # Width of tail = distance from last mark to max_val
+        right_width = max_val - last_mark_val
+            
+        area_2 = get_tail_area(height=last_mark_count, width=right_width)
 
-        total_area = sum(area_arr)
+        total_area = area_1 + sum(area_arr) + area_2
 
-        A_cut_area = 5 * (total_area / 6)
-        A_minus_cut_area = 4 * (total_area / 6)
-        B_cut_area = 3 * (total_area / 6)
-        B_minus_cut_area = 2 * (total_area / 6)
-        C_cut_area = total_area / 6
+        #--------------------------------------
+         
+        A_cut_area = 0.85 * (total_area)
+        A_minus_cut_area = 0.70 * (total_area)
+        B_cut_area = 0.55 * (total_area)
+        B_minus_cut_area = 0.40 * (total_area)
+        C_cut_area = 0.25 * (total_area)
+        C_minus_cut_area= 0.15 * (total_area)
+        D_cut_area= 0.08 * (total_area)
+
+        
+        
 
         median_student_index = len(sorted_marks) // 2
         median_marks = sorted_marks[median_student_index]
@@ -136,13 +172,18 @@ elif chose_upload == "CSV file":
         B_cut = 0
         A_minus_cut = 0
         A_cut = 0
+        C_minus_cut=0
+        D_cut=0
 
-        C_minus_cut = 0.3 * median_marks
+        E_cut = 0.3 * median_marks
         NC_cut = 0
 
         for q in range(len(area_arr)):
             sum_area += area_arr[q]
-
+            if D_cut == 0 and sum_area >= D_cut_area:
+                D_cut = X_val[q]
+            if C_minus_cut == 0 and sum_area >= C_minus_cut_area:
+                C_minus_cut = X_val[q]
             if C_cut == 0 and sum_area >= C_cut_area:
                 C_cut = X_val[q]
             if B_minus_cut == 0 and sum_area >= B_minus_cut_area:
@@ -155,7 +196,11 @@ elif chose_upload == "CSV file":
                 A_cut = X_val[q]
 
         NC_cut = st.slider("NC", min_value=0.0, max_value=float(max_val), value=0.0, step=1.0)
-        C_minus_cut = st.slider("C-", min_value=float(NC_cut + 1), max_value=float(max_val),
+        E_cut = st.slider("E", min_value=float(NC_cut + 1), max_value=float(max_val),
+                                value=float(E_cut), step=1.0)
+        D_cut = st.slider("D", min_value=float(E_cut + 1), max_value=float(max_val),
+                                value=float(D_cut), step=1.0)
+        C_minus_cut = st.slider("C-", min_value=float(D_cut + 1), max_value=float(max_val),
                                 value=float(C_minus_cut), step=1.0)
         C_cut = st.slider("C", min_value=float(C_minus_cut + 1), max_value=float(max_val),
                           value=float(C_cut), step=1.0)
@@ -168,7 +213,7 @@ elif chose_upload == "CSV file":
         A_cut = st.slider("A", min_value=float(A_minus_cut + 1), max_value=float(max_val),
                           value=float(A_cut), step=1.0)
 
-        A_count = A_minus_count = B_count = B_minus_count = C_count = C_minus_count = NC_count = 0
+        A_count = A_minus_count = B_count = B_minus_count = C_count = C_minus_count = D_count = E_count = NC_count = 0
 
         for num in df[marks]:
             if num > A_cut:
@@ -183,6 +228,10 @@ elif chose_upload == "CSV file":
                 C_count += 1
             elif num > C_minus_cut:
                 C_minus_count += 1
+            elif num > D_cut:
+                D_count += 1
+            elif num > E_cut:
+                E_count += 1
             else:
                 NC_count += 1
 
@@ -203,6 +252,8 @@ elif chose_upload == "CSV file":
             st.write(f"B- cutoff={B_minus_cut};  B- : {B_minus_count}")
             st.write(f"C cutoff={C_cut};  C : {C_count}")
             st.write(f"C- cutoff={C_minus_cut};  C- : {C_minus_count}")
+            st.write(f"D cutoff={D_cut};  D : {D_count}")
+            st.write(f"E cutoff={E_cut};  C- : {E_count}")
             st.write(f"NC cutoff={NC_cut}; NC : {NC_count}")
 
             plt.clf()
@@ -218,9 +269,11 @@ elif chose_upload == "CSV file":
             plt.axvline(B_minus_cut, color='red')
             plt.axvline(C_cut, color='red')
             plt.axvline(C_minus_cut, color='red')
+            plt.axvline(D_cut, color='red')
+            plt.axvline(E_cut, color='red')
             plt.axvline(NC_cut, color="black")
 
-            bins = np.linspace(0, max_val + 1.0, int(num_bins))   # note +1.0 (not 1e-6)
+            bins = np.linspace(0, max_val + 1.0, int(num_bins))   
             plt.hist(df[marks], bins=bins, edgecolor='black')
             plt.xlim(0, max_val + 1.0)
             plt.xticks(range(0, int(max_val)+1, 10), fontsize=12)
@@ -238,6 +291,8 @@ elif chose_upload == "CSV file":
                     'B-' if x > B_minus_cut else
                     'C' if x > C_cut else
                     'C-' if x > C_minus_cut else
+                    'D' if x > D_cut else
+                    'E' if x > E_cut else
                     'NC'
                 )
             )
@@ -261,6 +316,10 @@ elif chose_upload == "CSV file":
                     sum_grade += 6
                 elif ch == "C-":
                     sum_grade += 5
+                elif ch == "D":
+                    sum_grade += 4
+                elif ch == "E":
+                    sum_grade += 2
                 elif ch == "NC":
                     sum_grade += 0
 
