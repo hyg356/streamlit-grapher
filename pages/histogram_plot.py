@@ -175,7 +175,7 @@ elif chose_upload == "CSV file":
         C_minus_cut=0
         D_cut=0
 
-        E_cut = 0.3 * median_marks
+        E_cut = round(0.3 * median_marks,2)
         NC_cut = 0
 
         for q in range(len(area_arr)):
