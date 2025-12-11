@@ -9,7 +9,7 @@ def get_tail_area(height, width):
         return 0.0
     
     # Heuristic: Decay constant 'k' set so it drops to 5% (e^-3) at the boundary
-    k = 50000 / width 
+    k = 5000000000000000000000000000 / width 
     
     # Area = (h / k) * (1 - e^(-k * width))
     area = (height / k) * (1 - np.exp(-k * width))
