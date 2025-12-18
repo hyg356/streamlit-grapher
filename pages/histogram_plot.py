@@ -58,6 +58,7 @@ elif chose_upload == "CSV file":
         title_inp = st.text_input("Enter title:")
         X_label = st.text_input("Enter label for X-axis:")
         Y_label = st.text_input("Enter label for Y-axis:")
+        course_code = st.text_input("Enter the Course Code: ")
 
         df = pd.read_csv(uploaded_file)
         st.write("Available columns:", df.columns.tolist())
@@ -211,6 +212,55 @@ elif chose_upload == "CSV file":
         A_minus_cut = st.slider("A-", B_cut + 1, float(max_val), float(A_minus_cut), 1.0)
         A_cut = st.slider("A", A_minus_cut + 1, float(max_val), float(A_cut), 1.0)
 
+
+        # =========================
+        #   MGPV CALCULATION
+        # =========================
+
+        n = len(df["Grade"])
+        non_NC = 0
+
+        for i in range(n):
+            if df["Grade"].iloc[i] != "NC":
+                non_NC += 1
+
+        total = 0
+
+        for i in range(n):
+            g = df["Grade"].iloc[i]
+            if g == 'A':
+                total += 10
+            elif g == 'A-':
+                total += 9
+            elif g == 'B':
+                total += 8
+            elif g == 'B-':
+                total += 7
+            elif g == 'C':
+                total += 6
+            elif g == 'C-':
+                total += 5
+            elif g == 'D':
+                total += 4
+            elif g == 'E':
+                total += 2
+            elif g == 'NC':
+                total += 0
+
+        if non_NC == 0:
+            st.error("MGPV: Undefined (no non-NC students)")
+        else:
+            MGPV = round(total / non_NC, 2)
+        
+        AVG=round(df[marks].mean(),2)
+            
+
+
+
+
+
+
+
         # =========================
         # ASSIGN GRADES
         # =========================
@@ -228,11 +278,59 @@ elif chose_upload == "CSV file":
                 "E" if x > E_cut else
                 "NC"
         )
+        # =========================
+        # GRADE COUNTER
+        # =========================
+
+        A_count = 0
+        A_minus_count = 0
+        B_count = 0
+        B_minus_count = 0
+        C_count = 0
+        C_minus_count = 0
+        D_count = 0
+        E_count = 0
+        NC_count = 0
+
+        for k in range(n):
+            if df["Grade"].iloc[k] == "A":
+                A_count+=1
+            elif df["Grade"].iloc[k] == "A-":
+                A_minus_count+=1
+            elif df["Grade"].iloc[k] == "B":
+                B_count+=1
+            elif df["Grade"].iloc[k] == "B-":
+                B_minus_count+=1
+            elif df["Grade"].iloc[k] == "C":
+                C_count+=1
+            elif df["Grade"].iloc[k] == "C-":
+                C_minus_count+=1
+            elif df["Grade"].iloc[k] == "D":
+                D_count+=1
+            elif df["Grade"].iloc[k] == "E":
+                E_count+=1
+            elif df["Grade"].iloc[k] == "NC":
+                NC_count+=1
+            
+
+
 
         # =========================
         # PLOT + DOWNLOAD
         # =========================
         if st.button("Generate Histogram plot"):
+            st.write(f" A : {A_count}")
+            st.write(f" A- : {A_minus_count}")
+            st.write(f" B : {B_count}")
+            st.write(f" B- : {B_minus_count}")
+            st.write(f" C : {C_count}")
+            st.write(f" C- : {C_minus_count}")
+            st.write(f" D : {D_count}")
+            st.write(f" E : {E_count}")
+            st.write(f" NC : {NC_count}")
+
+            st.write(f"  Average = {AVG}  |  MGPV = {MGPV}  |  Course Code: {course_code}")
+
             plt.figure(figsize=(16, 8))
             plt.title(title_inp)
             plt.xlabel(X_label)
@@ -240,7 +338,8 @@ elif chose_upload == "CSV file":
 
             for cut in [A_cut, A_minus_cut, B_cut, B_minus_cut,
                         C_cut, C_minus_cut, D_cut, E_cut]:
-                plt.axvline(cut)
+                plt.axvline(cut, color="red")
+                plt.axvline(AVG, color='green')
 
             bins = np.arange(0, max_val + 2, 1)
             plt.hist(df[marks], bins=bins, edgecolor="black")
