@@ -213,6 +213,33 @@ elif chose_upload == "CSV file":
         A_cut = st.slider("A", A_minus_cut + 1, float(max_val), float(A_cut), 1.0)
 
 
+        
+            
+
+
+
+
+
+
+
+        # =========================
+        # ASSIGN GRADES
+        # =========================
+        df.drop(columns=["Grade"], errors="ignore", inplace=True)
+
+        df["Grade"] = df[marks].apply(
+            lambda x:
+                "A" if x > A_cut else
+                "A-" if x > A_minus_cut else
+                "B" if x > B_cut else
+                "B-" if x > B_minus_cut else
+                "C" if x > C_cut else
+                "C-" if x > C_minus_cut else
+                "D" if x > D_cut else
+                "E" if x > E_cut else
+                "NC"
+        )
+
         # =========================
         #   MGPV CALCULATION
         # =========================
@@ -253,31 +280,6 @@ elif chose_upload == "CSV file":
             MGPV = round(total / non_NC, 2)
         
         AVG=round(df[marks].mean(),2)
-            
-
-
-
-
-
-
-
-        # =========================
-        # ASSIGN GRADES
-        # =========================
-        df.drop(columns=["Grade"], errors="ignore", inplace=True)
-
-        df["Grade"] = df[marks].apply(
-            lambda x:
-                "A" if x > A_cut else
-                "A-" if x > A_minus_cut else
-                "B" if x > B_cut else
-                "B-" if x > B_minus_cut else
-                "C" if x > C_cut else
-                "C-" if x > C_minus_cut else
-                "D" if x > D_cut else
-                "E" if x > E_cut else
-                "NC"
-        )
         # =========================
         # GRADE COUNTER
         # =========================
